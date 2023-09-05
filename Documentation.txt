@@ -1,0 +1,27 @@
+GROUP NAME:
+PRODUCT NAME:
+TEAM MEMBERS: 
+
+INTRODUCTION:
+This Project, centered around General Purpose Input/Output technology, is an innovative initiative designed to tackle critical local and global challenges. Through the versatile capabilities of GPIO, we are exploring novel solutions that address a diverse range of issues. Join us on this transformative journey as we harness the power of GPIO to drive innovation and make a significant impact on our world.
+
+PROBLEM STATEMENT:
+The primary issue this project seeks to resolve is the frequent occurrence of road accidents caused by drivers using high-beam headlights while driving at night, posing a significant safety hazard on the roads.
+
+SOLUTION:
+The proposed solution involves the development of a motion and photo detector system designed to automatically dim the high-beam headlights when two vehicles approach each other, thus enhancing road safety and reducing the risk of accidents during nighttime encounters.
+
+TECHNOLOGY USED:
+1. Python
+2. Rasberry pie
+3. Vs code
+4. GPIO 
+5. Ultra sonic sensor
+6. RGB LED
+7. Photocell Sensor
+
+HOW IT WORKS:
+
+DEMO:
+
+FUTURE IIMPLEMENTATION
