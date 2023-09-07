@@ -22,6 +22,7 @@ TECHNOLOGY USED:
 7. Photocell Sensor
 
 HOW IT WORKS:
+flowchart_nightride.png
 
 DEMO:
 
