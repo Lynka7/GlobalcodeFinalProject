@@ -1,102 +1,136 @@
-#LIBRARIES
+# Libraries
 from time import sleep
-from gpiozero import LED
+from gpiozero import LED, Button, MCP3008
 import RPi.GPIO as GPIO
 from pprint import pprint
-
-
 import time
-#import board
-#sonar = adafruit_hcsr04.HCSR04(trigger_pin=board.D5, echo_pin=board.D6)
 
-led1 = LED(17)
-
-#Select GPIO Mode
-GPIO.setmode(GPIO.BCM) #  GPIO.setmode(GPIO.BOARD)
+# Select GPIO Mode
+GPIO.setmode(GPIO.BCM) 
 
 # GPIO pin numbers
-redPin = 12 #17
-greenPin = 19 #18
-bluePin = 13 # 27
-trig = 5 # 11       
-echo = 26 # 13
+redPin = 12 
+greenPin = 19 
+bluePin = 13 
+trig = 5      
+echo = 26 
+photocell = 6 
+onIndicator = LED(17)
+headlightToggleBtn = Button(18)
 
-#set pins as outputs
+# Set headlight sate
+headlight = 1
+
+# Set pins as outputs or inputs 
 GPIO.setup(redPin, GPIO.OUT)
 GPIO.setup(greenPin, GPIO.OUT)
 GPIO.setup(bluePin, GPIO.OUT)
 GPIO.setup(trig, GPIO.OUT)
 GPIO.setup(echo, GPIO.IN)
+GPIO.setup(photocell,GPIO.OUT)
+GPIO.output(photocell,False)
 
+
+def turnOff():
+    GPIO.output(redPin,GPIO.LOW)
+    GPIO.output(greenPin,GPIO.LOW)
+    GPIO.output(bluePin,GPIO.LOW)
+    
+    
 def high():
     GPIO.output(redPin,GPIO.LOW)
     GPIO.output(greenPin,GPIO.HIGH)
     GPIO.output(bluePin,GPIO.LOW)
+
 
 def low():
     GPIO.output(redPin, GPIO.LOW)
     GPIO.output(greenPin, GPIO.HIGH)
     GPIO.output(bluePin, GPIO.HIGH)
     
-    
-def ultraRead():
-    #GPIO.output(trig, GPIO.HIGH)
-    
-    start = time.time ()
-            
-    if GPIO.input(echo) == 1:
-        end = time.time()
-        distance = ((end - start) * 34300) / 2
-        
-        print ("distance:", distance, "cm")
-        print("echo -- ",GPIO.input(echo))
-        #time.sleep(.1)
-        
+
 
 def distance():
-    # set Trigger to HIGH
-    GPIO.output(trig, True)
- 
-    # set Trigger after 0.01ms to LOW
-    time.sleep(0.00001)
+    print("Distance Measurement In Progress")
+    GPIO.setup(trig,GPIO.OUT)
+    GPIO.setup(echo,GPIO.IN)
     GPIO.output(trig, False)
- 
-    StartTime = StopTime = time.time()
- 
-    # save StartTime
-    if GPIO.input(echo) == 0:
-        StartTime = time.time()
- 
-    # save stop time 
-    if GPIO.input(echo) == 1:
-        StopTime = time.time()
- 
-    # time difference between start and arrival
-    TimeElapsed = StopTime - StartTime
-    # multiply with the sonic speed (34300 cm/s)
-    # and divide by 2, because there and back
-    distance = (TimeElapsed * 34300) / 2
- 
-    return distance   
+    pulse_start = pulse_end = time.time()
+    
+    sleep(1)
+    
+    GPIO.output(trig, True)
+    sleep(0.00001)
+    GPIO.output(trig, False)
+    
+    while GPIO.input(echo) == 0:
+        pulse_start = time.time()
+        
+    while GPIO.input(echo) == 1:
+        pulse_end = time.time()
+        
+    pulse_duration = pulse_end - pulse_start
+    
+    return round(pulse_duration * 17150, 2)
+
+def intensity():
+    GPIO.output(photocell,False)
+    adc = MCP3008(channel=0)
+    voltage = 5 * adc.value
+    return voltage
 
 
-  
+def buttonPress():
+    toggleHeadlight(headlight)
+
+
+def senseLight():
+    GPIO.output(photocell,False)
+    
+    if GPIO.output(photocell) == 0:
+        state = 0
+        
+    while GPIO.output(photocell) == 1:
+        state = 1
+        
+    return state
+
+
+def toggleHeadlight(state):
+    global headlight
+    if state == 0 :
+        headlight = 1
+        high()
+        print("Headlight is ON")
+    else: 
+        headlight = 0
+        turnOff()
+        print("Headlight is off")
+        
+    return headlight
+
+
 try:
+    # Turn off headlight 
+    toggleHeadlight(headlight)
+    
     while True:
-        print("programme running>>>")
-        led1.on()
-        #high()
-        #sleep(1)
-        #low()
-        #sleep(1)
+        print("Programme Running", '*'*20)
+        onIndicator.on()
+        
         dist = distance()
         print ("Measured Distance = ", dist,'cm')
-        #sleep(1)
-        #break
         
-        
-        #time.sleep (0.00001) # 10 microseconds
-        #GPIO.output(trig, False)
+        vol = intensity()
+        print ("Measured Voltage = ", vol,'v')
+        if ((dist * 1) <= 15.00) and (headlight == 1):
+            low()
+            sleep(2)
+        elif ((dist * 1) > 15.00) and (headlight == 1):
+            high()
+            
+        headlightToggleBtn.when_pressed = buttonPress
+            
         
 except Exception as ex:
     pprint(ex)
