@@ -1,9 +1,14 @@
 # Libraries
+import serial
 from time import sleep
 from gpiozero import LED, Button, MCP3008
 import RPi.GPIO as GPIO
 from pprint import pprint
 import time
+
+from lightModes import high, low, turnoff
+# Set 
+
 
 # Select GPIO Mode
 GPIO.setmode(GPIO.BCM) 
@@ -114,6 +119,11 @@ try:
     # Turn off headlight 
     toggleHeadlight(headlight)
     
+    # Delay program dtart for two seconds
+    print("Waiting for progam to start")
+    sleep(2)
+    print("Progam started")
+    
     while True:
         print("Programme Running", '*'*20)
         onIndicator.on()
@@ -121,12 +131,21 @@ try:
         dist = distance()
         print ("Measured Distance = ", dist,'cm')
         
-        vol = intensity()
-        print ("Measured Voltage = ", vol,'v')
-        if ((dist * 1) <= 15.00) and (headlight == 1):
+        # Read Light intensity from arduino
+        ser = serial.Serial("/dev/ttyACM0",9600)
+        ser.baudrate=9600
+            
+        read_ser = ser.readline().decode('utf-8').rstrip()
+        
+        if read_ser == 0 or read_ser == "" :
+            print ("Measured Light Intensity =", read_ser, 'ce', "Light detected")
+        else:
+            print ("Measured Light Intensity =", read_ser, 'ce')
+            
+        if (((dist * 1) <= 15.00) and (headlight == 1)) and (read_ser == 0 or read_ser == ""):
             low()
             sleep(2)
-        elif ((dist * 1) > 15.00) and (headlight == 1):
+        elif (((dist * 1) > 15.00) and (headlight == 1)) and (read_ser == 0 or read_ser == ""):
             high()
             
         headlightToggleBtn.when_pressed = buttonPress
