@@ -27,6 +27,7 @@ flowchart_nightride.png
 DEMO:
 
 FUTURE IIMPLEMENTATION:
+To be able to make a device for cars that takes on this functionalities either pre-built or manually installed.
 
 PRESENTATION link:
 https://www.canva.com/design/DAFtqiYBghw/2c9l4AOulfn-XdAyyFqijw/view?utm_content=DAFtqiYBghw&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
