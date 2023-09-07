@@ -1,9 +1,10 @@
-GROUP NAME:
-PRODUCT NAME:
-TEAM MEMBERS: 
+GROUP NAME: TechPalz
+PRODUCT NAME: NightRide
+TEAM MEMBERS: Theodore Delali Ahiabor, Dzidula Jubilee Gati, Daniel Amenyogbele, Sadick Issaka
 
 INTRODUCTION:
-This Project, centered around General Purpose Input/Output technology, is an innovative initiative designed to tackle critical local and global challenges. Through the versatile capabilities of GPIO, we are exploring novel solutions that address a diverse range of issues. Join us on this transformative journey as we harness the power of GPIO to drive innovation and make a significant impact on our world.
+This project is centered around GPIO(General Purpose Input Output), its an innovative initiative designed to tackle critical “Road accidents”.
+Through the versatile capabilities of GPIO, we have deployed a solution that addresses this issue or challenge.
 
 PROBLEM STATEMENT:
 The primary issue this project seeks to resolve is the frequent occurrence of road accidents caused by drivers using high-beam headlights while driving at night, posing a significant safety hazard on the roads.
@@ -24,4 +25,4 @@ HOW IT WORKS:
 
 DEMO:
 
-FUTURE IIMPLEMENTATION
+FUTURE IIMPLEMENTATION:
