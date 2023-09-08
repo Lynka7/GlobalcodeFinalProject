@@ -22,7 +22,12 @@ TECHNOLOGY USED:
 7. Photocell Sensor
 
 HOW IT WORKS:
-flowchart_nightride.png
+1.Flowchart
+2.NightRide:
+  *Ultrasonic sensor: This detects any object at a given specific distance using ultrasonic waves.
+  *Photocell sensor: this component detects the light of a car  or object coming towards it.
+  *RGB Led(headlight): This components acts as a car headlight,which dims or brighten when the program is runned.
+3.
 
 DEMO:
 
